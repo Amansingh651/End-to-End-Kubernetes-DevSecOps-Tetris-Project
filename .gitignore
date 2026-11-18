@@ -1,0 +1,28 @@
+# Node.js dependencies
+node_modules/
+
+# React build output
+build/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# macOS files
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Terraform generated files
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+
+# Trivy security scan reports
+trivy-report.*
