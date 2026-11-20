@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   build-and-security:
@@ -61,3 +62,21 @@ jobs:
           severity: 'CRITICAL,HIGH,MEDIUM'
           format: 'table'
           exit-code: '0'
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image to GHCR
+        env:
+          REGISTRY: ghcr.io
+          IMAGE_NAME: amansingh651/tetris-v1
+        run: |
+          docker tag tetris-v1:ci $REGISTRY/$IMAGE_NAME:latest
+          docker tag tetris-v1:ci $REGISTRY/$IMAGE_NAME:$GITHUB_SHA
+          docker push $REGISTRY/$IMAGE_NAME:latest
+          docker push $REGISTRY/$IMAGE_NAME:$GITHUB_SHA
+          printf '\n' >> .github/workflows/devsecops.yml
